@@ -37,7 +37,7 @@ now_session.verify = False
 def login():
     print('-----------------验证码验证-----------------')
     resp1 = now_session.get(
-        'https://kyfw.12306.cn/passport/captcha/captcha-image?login_site=E&module=login&rand=sjrand&0.8430851651301317',
+        'https://kyfw.12306.cn/passport/captcha/captcha-image?login_site=E&module=login&rand=sjrand&0.7029629945484972',
         headers=head)
     with open('code.png', 'wb') as f:
         f.write(resp1.content)

@@ -9,11 +9,13 @@ __author__ = 'Vincent'
 '''
 Description: Login
 answer = 40, 43, 106, 40, 180, 40, 254, 47, 46, 110, 116, 110, 178, 108, 262, 107
-
 '''
 
 import requests
-from url_interface import verifyUrl, checkCaptchaUrl
+from url_interface import verifyUrl, checkCaptchaUrl, loginUrl, firstVerifyUrl, secondVerifyUrl
+from user import username, password
+from requests.cookies import RequestsCookieJar
+import json
 
 session = requests.Session()
 headers = {
@@ -32,6 +34,11 @@ class Login:
             '6': '114,124,',
             '7': '185,124,',
             '8': '254,124,',
+        }
+        self.user = {
+            'username': username,
+            'password': password,
+            'appid': 'otn'
         }
         self.__get_image()
 
@@ -57,9 +64,33 @@ class Login:
     def __send_verification(self):
         res = session.post(checkCaptchaUrl, headers=headers, data=self.data)
         print('status: %s' % res.status_code)
-        print('headers: %s' % res.headers)
-        print('content: %s' % res.content.decode('utf-8'))
+        print('content: %s' % res.json())
+        self.__send_username_pwd()
+
+    def __send_username_pwd(self):
+        res = session.post(loginUrl, headers=headers, data=self.user)
+        print('status: %s' % res.status_code)
+        print('content: %s' % res.json())
+        self.__verify_token()
+
+    def __verify_token(self):
+        self.data = {
+            'appid': 'otn'
+        }
+        print('-----------第一次验证-----------------')
+        res = session.post(firstVerifyUrl, headers=headers, data=self.data)
+        print('status: %s' % res.status_code)
+        print('content: %s' % res.json())
+        res_json = res.json()
+        print('------------第二次验证----------------')
+        print(res_json['newapptk'])
+        self.data2 = {
+            'tk': res_json['newapptk']
+        }
+        res2 = session.post(secondVerifyUrl, headers=headers, data=self.data2)
+        print('status: %s' % res2.status_code)
+        print('content: %s' % res2.json())
 
 
 if __name__ == '__main__':
-    Login()
+    login = Login()

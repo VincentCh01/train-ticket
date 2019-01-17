@@ -10,12 +10,5 @@ __author__ = 'Vincent'
 Description: 
 '''
 
-
-class username:
-    def __init__(self):
-        self.username = 'z4881663'
-
-
-class password:
-    def __init__(self):
-        self.passwod = '4881663z'
+username = 'z4881663'
+password = '4881663z'
