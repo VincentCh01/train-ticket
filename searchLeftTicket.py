@@ -43,21 +43,23 @@ async def _gen_GetRequest():
         with request.urlopen(req) as inform:
             data = inform.read().decode('utf-8')
             data = data.split('result')[1].split('[')[1].split("]")[0]
-            data = data.split('"')
+            data = data.split('预订')
+            secretStr = data[0]
+            data = data[1].split('|')
             for i in range(len(data)):
                 if (i + 1) % 8 == 0:
                     leftTicket = data[i].split('|')
                     # 26 30 31 32
-                    if leftTicket[3].count('G'):
-                        if leftTicket[11] == 'Y':
+                    if leftTicket[11] == 'Y':
+                        if leftTicket[3].count('G'):
                             print('列车 : %s  是否有票 : %s  无座 ： %s  二等座 : %s  一等座 : %s  商务座 : %s' % (
                                 leftTicket[3], leftTicket[11], leftTicket[26], leftTicket[30], leftTicket[31],
                                 leftTicket[32]))
-                    else:
-                        # 23 26 28 29
-                        # print('列车 : %s  是否有票 : %s  软卧 : %s  硬卧 : %s  硬座 : %s  无座 : %s' % (
-                        # leftTicket[3], leftTicket[11], leftTicket[23], leftTicket[28], leftTicket[29], leftTicket[26]))
-                        pass
+                        else:
+                            # 23 26 28 29
+                            print('列车 : %s  是否有票 : %s  软卧 : %s  硬卧 : %s  硬座 : %s  无座 : %s secretStr: %s' % (
+                            leftTicket[3], leftTicket[11], leftTicket[23], leftTicket[28], leftTicket[29],
+                            leftTicket[26], secretStr))
 
 
 if __name__ == '__main__':
