@@ -7,25 +7,28 @@
 __author__ = 'Vincent'
 
 '''
-Description: Login
-answer = 40, 43, 106, 40, 180, 40, 254, 47, 46, 110, 116, 110, 178, 108, 262, 107
+Description: 登陆
+location: 模拟用户选择验证码位置
+user: 登陆账号密码
+params: 获取验证码的相关参数
+data: 验证用户和密码的相关参数
+verify_token_1: 第一次验证的相关参数
+verify_token_2: 第二次验证相关的参数（成功后生成token，token即登陆状态）
 '''
 
 import requests
-from url_interface import verifyUrl, checkCaptchaUrl, loginUrl, firstVerifyUrl, secondVerifyUrl
+from api import Api
+
 from user import username, password
-from requests.cookies import RequestsCookieJar
-import json
 
 session = requests.Session()
-headers = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:64.0) Gecko/20100101 Firefox/64.0'
-}
 
 
 class Login:
+    __slots__ = ('__location', '__user', '__params', '__data', '__verify_token_1', '__verify_token_2')
+
     def __init__(self):
-        self.location = {
+        self.__location = {
             '1': '45,46,',
             '2': '115,46,',
             '3': '185,46,',
@@ -33,64 +36,67 @@ class Login:
             '5': '45,126,',
             '6': '115,126,',
             '7': '185,126,',
-            '8': '255,126,',
+            '8': '255,126,'
         }
-        self.user = {
+        self.__user = {
             'username': username,
             'password': password,
             'appid': 'otn'
         }
-        self.__get_image()
+        self.__params = {
+            'answer': 'login_site',
+            'module': 'login',
+            'rand': 'sjrand'
+        }
 
     def __get_image(self):
-        res = session.get(verifyUrl, headers=headers)
-        with open('verifyImage.png', 'wb') as f:
+        res = session.get(Api.captcha, params=self.__params)
+        with open('code.png', 'wb') as f:
             f.write(res.content)
-        self.__set_data(input('请输入验证码：'))
 
-    def __set_data(self, img_number):
+    def __send_verification(self, img_number):
         nums = img_number.split(',')
         answer = ''
         for i in nums:
-            answer += self.location[i]
-        self.data = {
+            answer += self.__location[i]
+        self.__data = {
             'answer': answer,
             'login_site': 'E',
             'rand': 'sjrand'
         }
-        print(self.data)
-        self.__send_verification()
-
-    def __send_verification(self):
-        res = session.post(checkCaptchaUrl, headers=headers, data=self.data)
+        res = session.post(Api.check_captcha, data=self.__data)
         print('status: %s' % res.status_code)
         print('content: %s' % res.json())
-        self.__send_username_pwd()
 
     def __send_username_pwd(self):
-        res = session.post(loginUrl, headers=headers, data=self.user)
+        res = session.post(Api.login, data=self.__user)
         print('status: %s' % res.status_code)
         print('content: %s' % res.json())
-        self.__verify_token()
 
     def __verify_token(self):
-        self.data = {
+        self.__verify_token_1 = {
             'appid': 'otn'
         }
         print('-----------第一次验证-----------------')
-        res = session.post(firstVerifyUrl, headers=headers, data=self.data)
+        res = session.post(Api.first_check, data=self.__verify_token_1)
         print('status: %s' % res.status_code)
-        print('content: %s' % res.json())
+        print('content: %s' % res.json()['result_message'])
         res_json = res.json()
         print('------------第二次验证----------------')
         print(res_json['newapptk'])
-        self.data2 = {
+        self.__verify_token_2 = {
             'tk': res_json['newapptk']
         }
-        res2 = session.post(secondVerifyUrl, headers=headers, data=self.data2)
+        res2 = session.post(Api.second_check, data=self.__verify_token_2)
         print('status: %s' % res2.status_code)
         print('content: %s' % res2.json())
 
+    def login(self):
+        self.__get_image()
+        self.__send_verification(input('请输入验证码：'))
+        self.__send_username_pwd()
+        self.__verify_token()
+
 
 if __name__ == '__main__':
-    login = Login()
+    Login().login()

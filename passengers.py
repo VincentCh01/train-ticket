@@ -7,38 +7,30 @@
 __author__ = 'Vincent'
 
 '''
-Description: passengers
+Description: 获取乘车人信息
+pageIndex： 获取页数
+pageSize： 每页数据量
 '''
 
-from url_interface import passengersUrl
-import login
+from login import session
+from api import Api
 from login import Login
-
-session = login.session
 
 
 class Passengers:
 
     def __init__(self):
-        self.data = {
+        self.__page = {
             'pageIndex': '1',
             'pageSize': '10'
         }
-        self.__get_all_passengers()
 
-    def __get_all_passengers(self):
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:64.0) Gecko/20100101 Firefox/64.0',
-            'Referer': 'https://kyfw.12306.cn/otn/view/passengers.html',
-            'Content-Type': 'application/x-www-form-urlencoded',
-        }
-        res = session.post(passengersUrl, headers=headers, data=self.data)
-        print('status: %s' % res.status_code)
-        with open('passengers.json', 'w',encoding='utf-8') as f:
+    def output_passengers(self):
+        res = session.post(Api.passengers, data=self.__page)
+        with open('passengers.json', 'w', encoding='utf-8') as f:
             f.write(res.text)
-        print(session.cookies)
 
 
 if __name__ == '__main__':
-    Login()
-    Passengers()
+    Login().login()
+    Passengers().output_passengers()
