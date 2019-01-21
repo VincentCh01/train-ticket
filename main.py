@@ -27,19 +27,13 @@ def create_order(count):
     tickets = __find_ticket()
     if __has_ticket(tickets):
         submit_order(tickets, count)
-    else:
-        create_order(count)
 
 
 def submit_order(tickets, count):
-    flag = False
     for i in range(0, len(tickets)):
         results = __parse_data(tickets[i])
         if str(results['train_code']).startswith('G'):
             Order(results)
-            flag = True
-    if not flag:
-        create_order(count)
 
 
 def __find_ticket():
@@ -73,4 +67,6 @@ def __parse_data(ticket):
 
 init_count = 0
 login()
-create_order(init_count)
+flag = True
+while not flag:
+    create_order(init_count)
