@@ -11,6 +11,7 @@ from user import from_station_name, to_station_name, train_date
 from login import session, Login
 from api import Api
 from search_ticket import LeftTicket
+import send_email
 
 '''
 Description: 订票
@@ -124,6 +125,7 @@ class Order:
         }
         res = session.post(Api.confirm_order, data=self.confirm_order)
         print(res.content.decode('utf-8'))
+        send_email.send_email()
         self.__search_result_order()
 
     def __search_result_order(self):
