@@ -69,4 +69,5 @@ init_count = 0
 login()
 flag = True
 while flag:
+    init_count += 1
     create_order(init_count)
