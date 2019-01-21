@@ -3,6 +3,7 @@
 # @Time    : 2019/1/16 22:41
 # @Author  : Vincent
 # @File    : login.py
+import yaml
 
 __author__ = 'Vincent'
 
@@ -18,7 +19,7 @@ verify_token_2: 第二次验证相关的参数（成功后生成token，token即
 
 import requests
 from api import Api
-
+import time
 from user import username, password
 
 session = requests.Session()
@@ -93,7 +94,15 @@ class Login:
 
     def login(self):
         self.__get_image()
-        self.__send_verification(input('请输入验证码：'))
+        while True:
+            time.sleep(10)
+            with open('captcha.yaml', 'r', encoding='utf-8') as f:
+                captcha_code = yaml.load(f.read())
+                print(captcha_code)
+                if not captcha_code['captcha'] == '':
+                    self.__send_verification(captcha_code['captcha'])
+                    break
+                f.close()
         self.__send_username_pwd()
         self.__verify_token()
 
