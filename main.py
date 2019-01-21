@@ -21,12 +21,16 @@ def login():
     Login().login()
 
 
-def create_order():
+def create_order(count):
+    count += 1
+    print('第 %s 次查票...' % count)
     tickets = __find_ticket()
     if __has_ticket(tickets):
-        for i in range(len(tickets) - 1, len(tickets)):
+        for i in range(0, len(tickets)):
             results = __parse_data(tickets[i])
             submit_order(results)
+    else:
+        create_order(count)
 
 
 def submit_order(results):
@@ -64,5 +68,6 @@ def __parse_data(ticket):
     return results
 
 
+init_count = 0
 login()
-create_order()
+create_order(init_count)

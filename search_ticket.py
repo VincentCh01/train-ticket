@@ -31,7 +31,7 @@ class LeftTicket:
         self.ticket = []
 
     def __parse__station_name(self):
-        with open('station_name.yaml', 'r') as f:
+        with open('station_name.yaml', 'r', encoding='gbk') as f:
             station_dict = yaml.load(f.read())
             self.params = {
                 'leftTicketDTO.train_date': user.train_date,
@@ -43,7 +43,11 @@ class LeftTicket:
     def __search_ticket(self):
         self.__parse__station_name()
         res = session.get(Api.search_ticket, params=self.params)
-        res_json = json.loads(res.content.decode('utf-8'))
+        content = res.content.decode('utf-8')
+        if not content.startswith('{'):
+            return
+        res_json = json.loads(content)
+        print('查票成功')
         tickets = parse.unquote(str(res_json['data']['result']), 'utf-8').split(',')
         ticket_list = []
         for i in range(0, len(tickets)):
