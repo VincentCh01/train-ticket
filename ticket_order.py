@@ -107,14 +107,14 @@ class Order:
 
     def __confirm_submit_order(self):
         self.confirm_order = {
-            'passengerTicketStr': 'O,0,1,张霖,1,430223199501291851,13813456184,N_O,0,1,白冰,1,430223198605042214,,N',
-            'oldPassengerStr': '张霖,1,430223199501291851,1_白冰,1,430223198605042214,1_',
+            'passengerTicketStr': 'O,0,1,张霖,1,430223199501291851,13813456184',
+            'oldPassengerStr': '张霖,1,430223199501291851,1_',
             'randCode': '',
             'purpose_codes': '00',
             'key_check_isChange': self.key_check_ischange,
             'leftTicketStr': self.left_ticket_str,
             'train_location': self.train_location,
-            'choose_seats': '1A1B',
+            'choose_seats': '1F',
             'seatDetailType': '000',
             'roomType': '00',
             'dwAll': 'N',

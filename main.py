@@ -26,15 +26,20 @@ def create_order(count):
     print('第 %s 次查票...' % count)
     tickets = __find_ticket()
     if __has_ticket(tickets):
-        for i in range(0, len(tickets)):
-            results = __parse_data(tickets[i])
-            submit_order(results)
+        submit_order(tickets, count)
     else:
         create_order(count)
 
 
-def submit_order(results):
-    Order(results)
+def submit_order(tickets, count):
+    flag = False
+    for i in range(0, len(tickets)):
+        results = __parse_data(tickets[i])
+        if str(results['train_code']).startswith('G'):
+            Order(results)
+            flag = True
+    if not flag:
+        create_order(count)
 
 
 def __find_ticket():
@@ -58,13 +63,11 @@ def __parse_data(ticket):
     to_station = ticket_list[7]
     train_location = ticket_list[15]
     results['train_no'] = train_no
-    results['train_code'] = train_code
+    results['train_code'] = train_code  # 车次
     results['secret_str'] = secret_str
     results['from'] = from_station
     results['to'] = to_station
     results['train_location'] = train_location
-    for k, v in results.items():
-        print(k + ":" + v)
     return results
 
 
