@@ -68,5 +68,5 @@ def __parse_data(ticket):
 init_count = 0
 login()
 flag = True
-while not flag:
+while flag:
     create_order(init_count)
