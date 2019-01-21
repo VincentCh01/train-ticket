@@ -47,7 +47,6 @@ class LeftTicket:
         if not content.startswith('{'):
             return
         res_json = json.loads(content)
-        print('查票成功')
         tickets = parse.unquote(str(res_json['data']['result']), 'utf-8').split(',')
         ticket_list = []
         for i in range(0, len(tickets)):

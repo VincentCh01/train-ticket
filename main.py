@@ -13,6 +13,7 @@ Description: 程序入口
 from login import Login
 from search_ticket import LeftTicket
 from ticket_order import Order
+import logging
 
 left_ticket = LeftTicket()
 
@@ -23,13 +24,13 @@ def login():
 
 def create_order(count):
     count += 1
-    print('第 %s 次查票...' % count)
+    logger.info('第 %s 次查票...' % count)
     tickets = __find_ticket()
     if __has_ticket(tickets):
-        submit_order(tickets, count)
+        submit_order(tickets)
 
 
-def submit_order(tickets, count):
+def submit_order(tickets):
     for i in range(0, len(tickets)):
         results = __parse_data(tickets[i])
         if str(results['train_code']).startswith('G'):
@@ -66,6 +67,17 @@ def __parse_data(ticket):
 
 
 init_count = 0
+# 创建一个logger
+logger = logging.getLogger('mylogger')
+logger.setLevel(logging.DEBUG)
+
+# 创建一个handler，用于写入日志文件
+fh = logging.FileHandler('test.log',encoding='utf-8')
+fh.setLevel(logging.DEBUG)
+
+# 给logger添加handler
+logger.addHandler(fh)
+
 login()
 flag = True
 while flag:
