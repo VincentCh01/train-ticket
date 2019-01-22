@@ -55,7 +55,10 @@ class Login:
             f.write(res.content)
 
     def __send_verification(self, img_number):
-        nums = img_number.split(',')
+        if img_number.__contains__(','):
+            nums = img_number.split(',')
+        else:
+            nums = img_number
         answer = ''
         for i in nums:
             answer += self.__location[i]

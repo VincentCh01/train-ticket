@@ -52,8 +52,8 @@ class Order:
         }
         res = session.post(Api.init_dc, data=self.__dc)
         content = res.content.decode('utf-8')
-        # with open('dc.html', 'w', encoding='utf-8') as f:
-        #    f.write(content)
+        with open('dc.html', 'w', encoding='utf-8') as f:
+            f.write(content)
         point = content.find('globalRepeatSubmitToken')
         repeat_submit_token = res.content.decode('utf-8')[point + 27:point + 59]
         point2 = content.find('leftTicketStr')
