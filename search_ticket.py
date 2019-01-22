@@ -44,11 +44,11 @@ class LeftTicket:
     def __search_ticket(self):
         self.__parse__station_name()
         res = session.get(Api.search_ticket, params=self.params)
-        content = res.content.decode('utf-8')
-        if not content.startswith('{'):
-            return
-        if not content.endswith('}'):
-            return
+        try:
+            content = res.content.decode('utf-8')
+        except UnicodeDecodeError as e:
+            print('except:', e)
+
         try:
             res_json = json.loads(content)
         except JSONDecodeError as e:
