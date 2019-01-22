@@ -11,6 +11,7 @@ from user import from_station_name, to_station_name, train_date
 from login import session, Login
 from api import Api
 from search_ticket import LeftTicket
+import send_email
 
 '''
 Description: 订票
@@ -75,8 +76,8 @@ class Order:
         self.__check = {
             'cancel_flag': 2,
             'bed_level_order_num': '000000000000000000000000000000',
-            'passengerTicketStr': 'O,0,1,张霖,1,430223199501291851,13813456184,N_O,0,1,白冰,1,430223198605042214,,N',
-            'oldPassengerStr': '张霖,1,430223199501291851,1_白冰,1,430223198605042214,1_',
+            'passengerTicketStr': 'O,0,1,张霖,1,430223199501291851,13813456184,N',
+            'oldPassengerStr': '张霖,1,430223199501291851,1_',
             'tour_flag': 'dc',
             'randCode': '',
             '_json_att': '',
@@ -89,7 +90,7 @@ class Order:
 
     def __get_queue_count(self):
         self.seats = {
-            'train_date': 'Sun Jan 20 2019 00:00:00 GMT+0800 (中国标准时间)',
+            'train_date': 'Wed Jan 23 2019 00:00:00 GMT+0800 (中国标准时间)',
             'train_no': self.train_no,
             'stationTrainCode': self.train_code,
             'seatType': 'O',
@@ -107,14 +108,14 @@ class Order:
 
     def __confirm_submit_order(self):
         self.confirm_order = {
-            'passengerTicketStr': 'O,0,1,张霖,1,430223199501291851,13813456184,N_O,0,1,白冰,1,430223198605042214,,N',
-            'oldPassengerStr': '张霖,1,430223199501291851,1_白冰,1,430223198605042214,1_',
+            'passengerTicketStr': 'O,0,1,张霖,1,430223199501291851,13813456184',
+            'oldPassengerStr': '张霖,1,430223199501291851,1_',
             'randCode': '',
             'purpose_codes': '00',
             'key_check_isChange': self.key_check_ischange,
             'leftTicketStr': self.left_ticket_str,
             'train_location': self.train_location,
-            'choose_seats': '1A1B',
+            'choose_seats': '1F',
             'seatDetailType': '000',
             'roomType': '00',
             'dwAll': 'N',
@@ -124,6 +125,7 @@ class Order:
         }
         res = session.post(Api.confirm_order, data=self.confirm_order)
         print(res.content.decode('utf-8'))
+        send_email.send_email()
         self.__search_result_order()
 
     def __search_result_order(self):
