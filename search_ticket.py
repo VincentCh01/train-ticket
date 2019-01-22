@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from json import JSONDecodeError
 
 __author__ = 'Vincent'
 
@@ -46,7 +47,13 @@ class LeftTicket:
         content = res.content.decode('utf-8')
         if not content.startswith('{'):
             return
-        res_json = json.loads(content)
+        try:
+            res_json = json.loads(content)
+        except JSONDecodeError as e:
+            print('except:', e)
+        finally:
+            with open('train_error.log', 'w+', encoding='utf-8') as f:
+                f.write(content)
         tickets = parse.unquote(str(res_json['data']['result']), 'utf-8').split(',')
         ticket_list = []
         for i in range(0, len(tickets)):
