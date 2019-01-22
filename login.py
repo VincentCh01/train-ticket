@@ -61,13 +61,17 @@ class Login:
         else:
             nums = img_number
         answer = ''
-        for i in nums:
-            answer += self.__location[i]
+        if isinstance(nums,list):
+            for i in nums:
+                answer += self.__location[i]
+        else:
+            answer = self.__location[nums]
         self.__data = {
             'answer': answer,
             'login_site': 'E',
             'rand': 'sjrand'
         }
+        print(answer)
         res = session.post(Api.check_captcha, data=self.__data)
         print('status: %s' % res.status_code)
         print('content: %s' % res.json())
