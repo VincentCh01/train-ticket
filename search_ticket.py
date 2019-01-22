@@ -48,11 +48,13 @@ class LeftTicket:
             content = res.content.decode('utf-8')
         except UnicodeDecodeError as e:
             print('except:', e)
+            return
 
         try:
             res_json = json.loads(content)
         except JSONDecodeError as e:
             print('except:', e)
+            return
         finally:
             with open('train_error.log', 'w+', encoding='utf-8') as f:
                 f.write(content)
