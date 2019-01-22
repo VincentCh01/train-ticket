@@ -47,6 +47,8 @@ class LeftTicket:
         content = res.content.decode('utf-8')
         if not content.startswith('{'):
             return
+        if not content.endswith('}'):
+            return
         try:
             res_json = json.loads(content)
         except JSONDecodeError as e:
