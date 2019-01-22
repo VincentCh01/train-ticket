@@ -76,8 +76,8 @@ class Order:
         self.__check = {
             'cancel_flag': 2,
             'bed_level_order_num': '000000000000000000000000000000',
-            'passengerTicketStr': 'O,0,1,张霖,1,430223199501291851,13813456184,N_O,0,1,白冰,1,430223198605042214,,N',
-            'oldPassengerStr': '张霖,1,430223199501291851,1_白冰,1,430223198605042214,1_',
+            'passengerTicketStr': 'O,0,1,张霖,1,430223199501291851,13813456184,N',
+            'oldPassengerStr': '张霖,1,430223199501291851,1_',
             'tour_flag': 'dc',
             'randCode': '',
             '_json_att': '',
@@ -90,7 +90,7 @@ class Order:
 
     def __get_queue_count(self):
         self.seats = {
-            'train_date': 'Sun Jan 20 2019 00:00:00 GMT+0800 (中国标准时间)',
+            'train_date': 'Wed Jan 23 2019 00:00:00 GMT+0800 (中国标准时间)',
             'train_no': self.train_no,
             'stationTrainCode': self.train_code,
             'seatType': 'O',
