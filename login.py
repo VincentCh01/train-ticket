@@ -61,11 +61,11 @@ class Login:
         else:
             nums = img_number
         answer = ''
-        if isinstance(nums,list):
+        if isinstance(nums, list):
             for i in nums:
                 answer += self.__location[i]
         else:
-            nums = '\'' + nums + '\''
+            nums = '\'' + str(nums) + '\''
             answer = self.__location[nums]
         self.__data = {
             'answer': answer,
