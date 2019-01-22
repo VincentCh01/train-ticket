@@ -15,8 +15,8 @@ Description:
 email_username = '18924919769@163.com'
 email_password = 'vincent.1229'
 
-username = 'z4881663'
-password = '4881663z'
+username = '1739062237@qq.com'
+password = 'zzz670516'
 
 from_station_name = '衡阳'
 to_station_name = '广州南'
