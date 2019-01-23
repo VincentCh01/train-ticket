@@ -65,8 +65,7 @@ class Login:
             for i in nums:
                 answer += self.__location[i]
         else:
-            nums = '\'' + str(nums) + '\''
-            answer = self.__location[nums]
+            answer = self.__location[str(nums)]
         self.__data = {
             'answer': answer,
             'login_site': 'E',
